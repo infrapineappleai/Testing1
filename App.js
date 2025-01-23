@@ -131,6 +131,7 @@ function App() {
           width: '50%',
           textAlign: 'center',
           borderCollapse: 'collapse',
+          alignItems: 'center', padding: '50px'
         }}
       >
         <thead>
