@@ -32,6 +32,8 @@ function App() {
        
         {/* name input */}
 
+         {/* <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '50px' }}> */}
+
 
         {/* age input */}
 
