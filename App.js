@@ -27,7 +27,7 @@ function App() {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '50px' }}>
 
       {/* Form to Add User */}
-      <div style={{ marginBottom: '20px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '50px' }}>
        
        
         {/* name input */}
