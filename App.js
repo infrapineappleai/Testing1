@@ -3,24 +3,24 @@ import './App.css';
 import axios from 'axios';
 
 // Reusable Button Component
-const Button = ({ onClick, label, color, style }) => (
-  <button
-    onClick={onClick}
-    style={{
-      backgroundColor: color,
-      color: 'white',
-      padding: '10px 20px',
-      borderRadius: '5px',
-      border: 'none',
-      cursor: 'pointer',
-      margin: '10px 5px',
-      transition: 'background-color 0.3s ease',
-      ...style,
-    }}
-  >
-    {label}
-  </button>
-);
+// const Button = ({ onClick, label, color, style }) => (
+  // <button
+  //   onClick={onClick}
+  //   style={{
+  //     backgroundColor: color,
+  //     color: 'white',
+  //     padding: '10px 20px',
+  //     borderRadius: '5px',
+  //     border: 'none',
+  //     cursor: 'pointer',
+  //     margin: '10px 5px',
+  //     transition: 'background-color 0.3s ease',
+  //     ...style,
+  //   }}
+  // >
+  //   {label}
+  // </button>
+// );
 
 // Reusable Input Component
 const InputField = ({ type, placeholder, value, onChange }) => (
