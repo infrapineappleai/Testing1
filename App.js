@@ -4,48 +4,127 @@ import axios from 'axios';
 
 function App() {
   const [users, setUsers] = useState([]);
-
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+  const [editingUser, setEditingUser] = useState(null);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:5000/user/view')
-      .then((response) => setUsers(response.data))
-      .catch((error) => console.error('Error fetching data:', error));
+    fetchUsers();
   }, []);
 
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/user/view');
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-  // Add user handler
+  const handleAddUser = async () => {
+    if (!name || !age) {
+      alert('Please fill in all fields.');
+      return;
+    }
+    try {
+      await axios.post('http://localhost:5000/user/add', { name, age });
+      setName('');
+      setAge('');
+      fetchUsers();
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
+  };
 
+  const handleDeleteUser = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/user/delete/${id}`);
+      fetchUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
 
+  const handleEditUser = (user) => {
+    setEditingUser(user);
+    setName(user.name);
+    setAge(user.age);
+  };
 
-  // delete
-
-
-
+  const handleUpdateUser = async () => {
+    if (!name || !age) {
+      alert('Please fill in all fields.');
+      return;
+    }
+    try {
+      await axios.put(`http://localhost:5000/user/update/${editingUser._id}`, { name, age });
+      setName('');
+      setAge('');
+      setEditingUser(null);
+      fetchUsers();
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '50px' }}>
-
-      {/* Form to Add User */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '50px' }}>
-       
-       
-        {/* name input */}
-
-         {/* <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '50px' }}> */}
-
-
-        {/* age input */}
-
-
-       {/* add button 28a745 */}
-
-       
+      {/* Form to Add or Edit User */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
+        <h2>{editingUser ? 'Edit User' : 'Add User'}</h2>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          style={{ padding: '10px', margin: '5px', width: '200px' }}
+        />
+        <input
+          type="number"
+          placeholder="Age"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          style={{ padding: '10px', margin: '5px', width: '200px' }}
+        />
+        <button
+          onClick={editingUser ? handleUpdateUser : handleAddUser}
+          style={{
+            backgroundColor: '#28a745',
+            color: 'white',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            border: 'none',
+            cursor: 'pointer',
+            margin: '10px',
+            transition: 'background-color 0.3s ease',
+          }}
+        >
+          {editingUser ? 'Update User' : 'Add User'}
+        </button>
+        {editingUser && (
+          <button
+            onClick={() => {
+              setEditingUser(null);
+              setName('');
+              setAge('');
+            }}
+            style={{
+              backgroundColor: '#6c757d',
+              color: 'white',
+              padding: '10px 20px',
+              borderRadius: '5px',
+              border: 'none',
+              cursor: 'pointer',
+              margin: '10px',
+              transition: 'background-color 0.3s ease',
+            }}
+          >
+            Cancel
+          </button>
+        )}
       </div>
 
-
-
-      {/* Table */}
+      {/* Table to Display Users */}
       <table
         border="1"
         style={{
@@ -58,7 +137,7 @@ function App() {
           <tr>
             <th>Name</th>
             <th>Age</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +147,7 @@ function App() {
               <td>{user.age}</td>
               <td>
                 <button
+                  onClick={() => handleEditUser(user)}
                   style={{
                     backgroundColor: '#007bff',
                     color: 'white',
@@ -82,6 +162,7 @@ function App() {
                   Edit
                 </button>
                 <button
+                  onClick={() => handleDeleteUser(user._id)}
                   style={{
                     backgroundColor: '#dc3545',
                     color: 'white',
